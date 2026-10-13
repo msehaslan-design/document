@@ -5,6 +5,7 @@ import { es } from '../../packages/shared/src/i18n/messages/es';
 import { ja } from '../../packages/shared/src/i18n/messages/ja';
 import { ko } from '../../packages/shared/src/i18n/messages/ko';
 import { pt } from '../../packages/shared/src/i18n/messages/pt';
+import { tr } from '../../packages/shared/src/i18n/messages/tr';
 import { zhCN } from '../../packages/shared/src/i18n/messages/zh-CN';
 import { LanguageCode, SHELL_LOCALES } from '@ranuts/shared/i18n';
 
@@ -37,6 +38,7 @@ const TABLES: Record<string, Record<string, unknown>> = {
   [LanguageCode.DE]: asTable(de),
   [LanguageCode.ES]: asTable(es),
   [LanguageCode.PT]: asTable(pt),
+  [LanguageCode.TR]: asTable(tr),
 };
 
 describe('message tables', () => {

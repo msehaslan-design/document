@@ -54,6 +54,7 @@ const SAME_AS_ENGLISH: Partial<Record<string, Array<keyof I18nMessages>>> = {
   de: ['themeSystem', 'agentEndpointAnthropic', 'agentEndpointGemini'],
   es: ['themeSystem', 'agentRoleError', 'agentEndpointAnthropic', 'agentEndpointGemini'],
   pt: ['themeSystem', 'agentEndpointAnthropic', 'agentEndpointGemini'],
+  tr: ['agentEndpointAnthropic', 'agentEndpointGemini'],
 };
 
 /** The product name, which reads the same in every language. */
@@ -65,8 +66,9 @@ const restore = () => {
 };
 
 describe('shell locales', () => {
-  it('ships the seven languages the language menu offers', () => {
-    expect([...SHELL_LOCALES]).toEqual(['en', 'zh', 'ja', 'ko', 'de', 'es', 'pt']);
+  // This fork adds Turkish (its default) in front of the upstream seven.
+  it('ships Turkish plus the seven languages the language menu offers', () => {
+    expect([...SHELL_LOCALES]).toEqual(['tr', 'en', 'zh', 'ja', 'ko', 'de', 'es', 'pt']);
   });
 
   it.each(SHELL_LOCALES.filter((l) => l !== LanguageCode.EN))(

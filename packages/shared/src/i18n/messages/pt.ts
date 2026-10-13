@@ -404,4 +404,5 @@ export const pt: Partial<I18nMessages> = {
   historyClearSearch: 'Limpar a procura',
   historyDeleteTitle: 'Eliminar este documento',
   historyClearTitle: 'Eliminar tudo',
+  untitledDocument: 'Sem título',
 };

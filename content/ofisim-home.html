@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/icons/document.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/document-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/document-180.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <!-- Deep links (?new=, ?file=, ?src=, ?open= ...) and embedding belong to the
+         editor: forward them before anything renders. Same rule as upstream. -->
+    <script>
+      (function () {
+        try {
+          var q = location.search;
+          var deep = /[?&](file|src|new|open|embed|embedded|readonly|agent)(=|&|$)/.test(q);
+          var framed = window.parent !== window;
+          if (deep || framed) {
+            location.replace('/editor' + (q || (framed ? '?embed=1' : '')) + location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="theme-color" content="#a9e7e4" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="robots" content="noindex" />
+    <title>Ofisim</title>
+    <meta
+      name="description"
+      content="Word, Excel, PowerPoint ve PDF dosyalarını tarayıcıda açın ve düzenleyin. Dosyalar cihazınızdan çıkmaz."
+    />
+    <style>
+      /* This fork's homepage (Turkish), copied verbatim to the site root by
+         bin/build-pages.mjs. Bulut look: light turquoise top bar, mint cards,
+         buttons with a light top edge. No external assets. */
+      :root {
+        --bar: #a9e7e4;
+        --bar-ink: #0f3d3c;
+        --bg: #f6fbfa;
+        --ink: #17302f;
+        --muted: #4f6b69;
+        --card: #ecf9f4;
+        --card-line: #c9eadf;
+        --accent: #14a3a0;
+        --accent-dark: #0d7f7d;
+        --word: #2b6cd4;
+        --cell: #1f8a4c;
+        --slide: #d0562b;
+        --radius: 16px;
+        font-family:
+          'Inter',
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          'Helvetica Neue',
+          Arial,
+          sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bar: #1d4746;
+          --bar-ink: #dff7f5;
+          --bg: #101a1a;
+          --ink: #e5f2f0;
+          --muted: #9fb8b5;
+          --card: #172726;
+          --card-line: #284241;
+          --accent: #3cc6c2;
+          --accent-dark: #7fdcd9;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        background: var(--bar);
+        color: var(--bar-ink);
+        padding: 14px 0;
+        padding-top: max(14px, env(safe-area-inset-top));
+      }
+      .bar {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+      .brand img {
+        width: 28px;
+        height: 28px;
+      }
+      .bar a {
+        color: var(--bar-ink);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+      }
+      main {
+        flex: 1;
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 24px 16px 32px;
+      }
+      h1 {
+        font-size: clamp(22px, 4vw, 30px);
+        margin: 4px 0 6px;
+      }
+      .lead {
+        color: var(--muted);
+        margin: 0 0 22px;
+        font-size: 16px;
+        line-height: 1.5;
+        max-width: 62ch;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 14px;
+      }
+      .tile {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        background: var(--card);
+        border: 1px solid var(--card-line);
+        border-radius: var(--radius);
+        padding: 18px;
+        color: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        font: inherit;
+        text-align: left;
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
+      }
+      .tile:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(16, 80, 78, 0.12);
+      }
+      .tile:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--accent);
+      }
+      .icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 800;
+        font-size: 20px;
+        background:
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 55%), var(--c, var(--accent));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.45),
+          0 2px 6px rgba(0, 0, 0, 0.12);
+      }
+      .tile b {
+        font-size: 17px;
+      }
+      .tile span {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .doc .icon {
+        --c: var(--word);
+      }
+      .sheet .icon {
+        --c: var(--cell);
+      }
+      .slides .icon {
+        --c: var(--slide);
+      }
+      .recent {
+        margin-top: 22px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        align-items: center;
+      }
+      .recent [data-recent-slot] a {
+        display: inline-block;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 55%), var(--accent);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.4),
+          0 2px 6px rgba(0, 0, 0, 0.12);
+      }
+      .recent a.plain {
+        color: var(--accent-dark);
+        font-weight: 600;
+        text-decoration: none;
+        padding: 10px 2px;
+      }
+      .notes {
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .notes p {
+        margin: 6px 0;
+        max-width: 72ch;
+      }
+      footer {
+        padding: 16px 0;
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+        border-top: 1px solid var(--card-line);
+      }
+      footer p {
+        max-width: 960px;
+        margin: 4px auto;
+        padding: 0 16px;
+        color: var(--muted);
+        font-size: 12.5px;
+        line-height: 1.5;
+      }
+      footer a {
+        color: var(--accent-dark);
+      }
+    </style>
+    <script src="/open-local.js" defer></script>
+    <script src="/landing-prefetch.js" defer></script>
+    <script src="/history-recent.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div class="bar">
+        <div class="brand"><img src="/icons/document.svg" alt="" />Ofisim</div>
+        <a href="/history?locale=tr">Kayıtlı belgeler</a>
+      </div>
+    </header>
+    <main>
+      <h1>Ne yapmak istersiniz?</h1>
+      <p class="lead">
+        Word, Excel, PowerPoint ve PDF dosyalarını bu cihazda açıp düzenleyin. Dosyalarınız hiçbir sunucuya gönderilmez;
+        uygulama kurulduktan sonra internetsiz de çalışır.
+      </p>
+      <div class="grid">
+        <button type="button" class="tile open" data-open-local="/editor?locale=tr&open=local">
+          <div class="icon" aria-hidden="true">↥</div>
+          <b>Dosya aç</b>
+          <span>docx, xlsx, pptx, pdf, odt, csv ve eski Office dosyaları</span>
+        </button>
+        <a class="tile doc" href="/editor?new=docx&locale=tr">
+          <div class="icon" aria-hidden="true">W</div>
+          <b>Yeni belge</b>
+          <span>Boş bir Word belgesi</span>
+        </a>
+        <a class="tile sheet" href="/editor?new=xlsx&locale=tr">
+          <div class="icon" aria-hidden="true">X</div>
+          <b>Yeni tablo</b>
+          <span>Boş bir Excel tablosu</span>
+        </a>
+        <a class="tile slides" href="/editor?new=pptx&locale=tr">
+          <div class="icon" aria-hidden="true">P</div>
+          <b>Yeni sunu</b>
+          <span>Boş bir PowerPoint sunusu</span>
+        </a>
+      </div>
+      <div class="recent">
+        <span data-recent-slot data-recent-label="Kaldığınız yerden devam edin:" hidden></span>
+        <a class="plain" href="/history?locale=tr">Tüm kayıtlı belgeler →</a>
+      </div>
+      <div class="notes">
+        <p>
+          Otomatik kaydetme açıksa değişiklikler bu tarayıcıda 7 gün boyunca kurtarma kopyası olarak saklanır. Asıl
+          dosyanızı kaydetmek için düzenleyicide <b>Dosya → Kaydet</b> ya da <b>İndir</b> komutunu kullanın.
+        </p>
+        <p>
+          Telefonda ve tablette tarayıcı menüsünden <b>Ana ekrana ekle</b> ya da <b>Uygulamayı yükle</b> seçeneğiyle
+          uygulama gibi kullanabilirsiniz.
+        </p>
+      </div>
+    </main>
+    <footer>
+      <p>
+        ONLYOFFICE tabanlıdır ve AGPL-3.0 lisanslıdır. Kaynak kodu:
+        <a href="https://github.com/msehaslan-design/document">github.com/msehaslan-design/document</a> (yukarı akış:
+        <a href="https://github.com/ranuts/document">ranuts/document</a>).
+      </p>
+      <p>
+        ONLYOFFICE, Ascensio System SIA'nın ticari markasıdır. Bu site ONLYOFFICE veya Ascensio System SIA ile
+        bağlantılı değildir.
+      </p>
+    </footer>
+    <!-- Registers the service worker (offline use) and promotes a waiting one on
+         this page when no editor window is open. See public/sw-register.js. -->
+    <script src="/sw-register.js" defer></script>
+  </body>
+</html>

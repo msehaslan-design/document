@@ -402,4 +402,5 @@ export const ja: Partial<I18nMessages> = {
   historyClearSearch: '検索をクリア',
   historyDeleteTitle: 'このドキュメントを削除',
   historyClearTitle: 'すべて削除',
+  untitledDocument: '無題',
 };

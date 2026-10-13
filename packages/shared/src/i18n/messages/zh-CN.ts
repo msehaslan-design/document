@@ -380,4 +380,5 @@ export const zhCN: I18nMessages = {
   historyExpiresIn: '剩 {days} 天',
   historyExpiresInOne: '剩 1 天',
   historyExpiresToday: '今天',
+  untitledDocument: '未命名',
 };

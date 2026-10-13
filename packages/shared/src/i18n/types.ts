@@ -395,4 +395,6 @@ export interface I18nMessages {
   historyOpenFile: string;
   historyRailSettings: string;
   historyRailRetention: string;
+  /** File name (without extension) given to a new blank document. */
+  untitledDocument: string;
 }

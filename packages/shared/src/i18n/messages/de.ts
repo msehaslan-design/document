@@ -421,4 +421,5 @@ export const de: Partial<I18nMessages> = {
   historyClearSearch: 'Suche zurücksetzen',
   historyDeleteTitle: 'Dieses Dokument löschen',
   historyClearTitle: 'Alles löschen',
+  untitledDocument: 'Unbenannt',
 };

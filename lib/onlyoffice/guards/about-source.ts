@@ -12,7 +12,7 @@
  * Legal text is additive; guards/chrome.ts hides only product branding.
  */
 const NOTICE_ID = 'oo-source-notice';
-const SOURCE_URL = 'https://github.com/ranuts/document';
+const SOURCE_URL = 'https://github.com/msehaslan-design/document';
 const WATCHED = '__ranSourceNoticeWatched';
 
 function renderNotice(doc: Document, panel: HTMLElement): void {

@@ -56,6 +56,16 @@ export function generate({ outDir = resolve(ROOT, 'public') } = {}) {
     const rel = locale === DEFAULT_LOCALE ? 'index.html' : `${LOCALES[locale].prefix}/index.html`.replace(/^\//, '');
     outputs.push({ rel, route: LOCALES[locale].home, html, source: src, locale, kind: 'home' });
   }
+  // This fork: the site root is its own Turkish homepage rather than the
+  // rendered English landing page. content/ofisim-home.html is used verbatim.
+  const forkHome = resolve(ROOT, 'content/ofisim-home.html');
+  if (existsSync(forkHome)) {
+    const root = outputs.find((o) => o.rel === 'index.html');
+    if (root) {
+      root.html = readFileSync(forkHome, 'utf8');
+      root.source = 'content/ofisim-home.html';
+    }
+  }
   for (const page of PAGES) {
     for (const locale of Object.keys(LOCALES)) {
       const src = page.sources[locale];

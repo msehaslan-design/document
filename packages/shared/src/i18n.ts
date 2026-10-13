@@ -6,6 +6,7 @@ import { ko } from './i18n/messages/ko';
 import { de } from './i18n/messages/de';
 import { es } from './i18n/messages/es';
 import { pt } from './i18n/messages/pt';
+import { tr } from './i18n/messages/tr';
 import { getAllQueryString, getCookie, localStorageGetItem, localStorageSetItem } from 'ranuts/utils';
 
 /**
@@ -32,6 +33,7 @@ export enum LanguageCode {
   ES = 'es',
   /** Portuguese */
   PT = 'pt',
+  TR = 'tr',
   /** Persian (right-to-left) */
 }
 
@@ -55,6 +57,7 @@ export type Language = LanguageCode;
  * land. test/unit/i18n-locales.test.ts fails if any table loses a key.
  */
 export const SHELL_LOCALES: readonly Language[] = [
+  LanguageCode.TR,
   LanguageCode.EN,
   LanguageCode.ZH,
   LanguageCode.JA,
@@ -85,7 +88,8 @@ export const isRtlLanguage = (lang: Language): boolean => RTL_LANGUAGES.includes
  * which generates those pages -- the app needs it to send a reader back to the
  * homepage they came from rather than to the English one.
  */
-export const localeHomePath = (lang: Language): string => (lang === LanguageCode.EN ? '/' : `/${lang}/`);
+export const localeHomePath = (lang: Language): string =>
+  lang === LanguageCode.EN || lang === LanguageCode.TR ? '/' : `/${lang}/`;
 
 /**
  * Carry the page's language explicitly into an app URL, including English. The app
@@ -202,12 +206,16 @@ export type { I18nMessages } from './i18n/types';
  * complete is a choice the i18n tests enforce rather than one the compiler
  * makes impossible to relax.
  */
-const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN, I18nMessages> = {
+const completeMessages: Record<LanguageCode.ZH | LanguageCode.EN | LanguageCode.TR, I18nMessages> = {
   [LanguageCode.ZH]: zhCN,
   [LanguageCode.EN]: en,
+  [LanguageCode.TR]: tr,
 };
 
-const partialMessages: Record<Exclude<Language, LanguageCode.ZH | LanguageCode.EN>, Partial<I18nMessages>> = {
+const partialMessages: Record<
+  Exclude<Language, LanguageCode.ZH | LanguageCode.EN | LanguageCode.TR>,
+  Partial<I18nMessages>
+> = {
   [LanguageCode.JA]: ja,
   [LanguageCode.KO]: ko,
   [LanguageCode.DE]: de,
@@ -262,23 +270,19 @@ class I18n {
   }
 
   constructor() {
-    // Pick one preference source for the whole app. An unsupported language
-    // falls back to English rather than inheriting a different saved choice.
-    // Priority: URL -> cookie -> saved choice -> preferred browser language.
-    // eslint-disable-next-line n/no-unsupported-features/node-builtins
-    const nav = typeof navigator === 'undefined' ? undefined : navigator;
+    // Pick one preference source for the whole app. This fork is Turkish-first:
+    // without an explicit choice (URL -> cookie -> saved choice) the shell and
+    // the editor start in Turkish, whatever the browser's own language is.
     const preferredLocale =
       this.getUrlParameter('locale') ||
       this.getCookie('locale') ||
       localStorageGetItem('document-lang') ||
-      nav?.languages?.[0] ||
-      nav?.language ||
-      null;
+      LanguageCode.TR;
 
-    this.currentLanguage = this.normalizeLanguage(preferredLocale) || LanguageCode.EN;
+    this.currentLanguage = this.normalizeLanguage(preferredLocale) || LanguageCode.TR;
     // The editor supports additional languages; shell copy still uses English
     // when it has no translations for that otherwise valid editor language.
-    this.editorLocale = resolveEditorLocale(preferredLocale) || OnlyOfficeLanguageCode.EN;
+    this.editorLocale = resolveEditorLocale(preferredLocale) || LanguageCode.TR;
   }
 
   /**

@@ -42,3 +42,12 @@ Object.defineProperty(window, 'localStorage', {
   configurable: true,
   value: localStorageMock,
 });
+
+// This fork starts in Turkish when nothing else is chosen. The suites assert the
+// English copy, so pin the shell language for them; test/unit/i18n.test.ts
+// clears this and checks the Turkish default on its own.
+try {
+  localStorage.setItem('document-lang', 'en');
+} catch {
+  /* no storage in this environment */
+}

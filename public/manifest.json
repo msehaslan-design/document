@@ -1,7 +1,7 @@
 {
-  "name": "Document Editor",
-  "short_name": "Editor",
-  "description": "Open, edit and save documents locally in your browser.",
+  "name": "Ofisim",
+  "short_name": "Ofisim",
+  "description": "Belgeleri tarayıcıda açın, düzenleyin ve cihazınıza kaydedin.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -25,5 +25,6 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "lang": "tr"
 }

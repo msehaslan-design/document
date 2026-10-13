@@ -397,4 +397,5 @@ export const en: I18nMessages = {
   historyOpenFile: 'Open a file',
   historyRailSettings: 'Settings',
   historyRailRetention: 'Retention',
+  untitledDocument: 'Untitled',
 };

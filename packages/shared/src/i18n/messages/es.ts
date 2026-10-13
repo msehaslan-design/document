@@ -408,4 +408,5 @@ export const es: Partial<I18nMessages> = {
   historyClearSearch: 'Borrar la búsqueda',
   historyDeleteTitle: 'Eliminar este documento',
   historyClearTitle: 'Eliminarlo todo',
+  untitledDocument: 'Sin título',
 };

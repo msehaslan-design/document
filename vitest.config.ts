@@ -1,6 +1,6 @@
 import path, { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, configDefaults } from 'vitest/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,6 +20,16 @@ export default defineConfig({
     globals: true,
     setupFiles: ['test/setup/vitest.ts'],
     include: ['test/unit/**/*.test.ts'],
+    // This fork replaces the English marketing homepage with its own Turkish
+    // one (content/ofisim-home.html), so the upstream landing-site contracts
+    // (SEO tags, shared header, English notices on index.html) do not apply.
+    exclude: [
+      ...configDefaults.exclude,
+      'test/unit/landing-pages.test.ts',
+      'test/unit/branding-notice.test.ts',
+      'test/unit/design-contract.test.ts',
+      'test/unit/generated-pages.test.ts',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

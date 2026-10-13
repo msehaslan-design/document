@@ -393,4 +393,5 @@ export const ko: Partial<I18nMessages> = {
   historyClearSearch: '검색 지우기',
   historyDeleteTitle: '이 문서 삭제',
   historyClearTitle: '전체 삭제',
+  untitledDocument: '제목 없음',
 };

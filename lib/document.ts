@@ -48,7 +48,7 @@ export const onCreateNew = async (ext: string, options?: { docId?: string }): Pr
       hideControlPanelFn();
     }
     setDocmentObj({
-      fileName: 'Untitled' + ext,
+      fileName: t('untitledDocument') + ext,
       file: undefined,
     });
     await loadEditorApi();

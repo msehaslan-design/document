@@ -101,7 +101,9 @@ describe('i18n', () => {
     });
 
     it.each(['url', 'cookie', 'storage', 'browser'] as const)(
-      'uses English when the %s language is unsupported, without inheriting a different language',
+      // This fork is Turkish-first: an unsupported or missing choice lands on
+      // Turkish, and the browser language is never consulted.
+      'uses Turkish when the %s language is unsupported, without inheriting a different language',
       async (source) => {
         window.history.pushState({}, '', '/');
         localStorage.clear();
@@ -119,29 +121,29 @@ describe('i18n', () => {
 
         vi.resetModules();
         const fresh = await import('@ranuts/shared/i18n');
-        expect(fresh.getLanguage()).toBe(LanguageCode.EN);
-        expect(fresh.getOnlyOfficeLang()).toBe('en');
-        expect(fresh.t('agentTitle')).toBe('AI Assistant');
+        expect(fresh.getLanguage()).toBe(LanguageCode.TR);
+        expect(fresh.getOnlyOfficeLang()).toBe('tr');
+        expect(fresh.t('agentTitle')).toBe(fresh.i18n.getMessages(LanguageCode.TR).agentTitle);
       },
     );
 
-    it('uses English when no language preference is available', async () => {
+    it('uses Turkish when no language preference is available', async () => {
       localStorage.clear();
       vi.spyOn(navigator, 'languages', 'get').mockReturnValue([]);
       vi.spyOn(navigator, 'language', 'get').mockReturnValue('');
       vi.resetModules();
       const fresh = await import('@ranuts/shared/i18n');
-      expect(fresh.getLanguage()).toBe(LanguageCode.EN);
-      expect(fresh.getOnlyOfficeLang()).toBe('en');
+      expect(fresh.getLanguage()).toBe(LanguageCode.TR);
+      expect(fresh.getOnlyOfficeLang()).toBe('tr');
     });
 
-    it('uses English shell copy for an editor-only language despite a previous Chinese choice', async () => {
+    it('uses Turkish shell copy for an editor-only language despite a previous Chinese choice', async () => {
       window.history.pushState({}, '', '/?locale=fr-FR');
       document.cookie = 'locale=zh-CN;path=/';
       localStorage.setItem('document-lang', LanguageCode.ZH);
       vi.resetModules();
       const fresh = await import('@ranuts/shared/i18n');
-      expect(fresh.getLanguage()).toBe(LanguageCode.EN);
+      expect(fresh.getLanguage()).toBe(LanguageCode.TR);
       expect(fresh.getOnlyOfficeLang()).toBe('fr');
     });
 
@@ -261,34 +263,34 @@ describe('editor UI locale (getOnlyOfficeLang) follows the visitor beyond en/zh'
    * editor. The table is gone; what is pinned here is that asking for a locale
    * the site does not have falls back cleanly rather than half-applying.
    */
-  it('?locale=fa falls back to English, shell and editor alike', async () => {
+  it('?locale=fa falls back to Turkish, shell and editor alike', async () => {
     window.history.pushState({}, '', '/?locale=fa');
     vi.resetModules();
     const m = await import('@ranuts/shared/i18n');
-    expect(m.getLanguage()).toBe(LanguageCode.EN);
-    expect(m.getOnlyOfficeLang()).toBe('en');
-    expect(m.t('uploadDocument')).toBe('View/Edit Document');
+    expect(m.getLanguage()).toBe(LanguageCode.TR);
+    expect(m.getOnlyOfficeLang()).toBe('tr');
+    expect(m.t('uploadDocument')).toBe(m.i18n.getMessages(LanguageCode.TR).uploadDocument);
   });
 
-  it('an unsupported ?locale (fa) falls back to English even with other browser languages', async () => {
+  it('an unsupported ?locale (fa) falls back to Turkish even with other browser languages', async () => {
     window.history.pushState({}, '', '/?locale=fa');
     const spy = vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fa-IR', 'de-DE', 'en']);
     try {
       vi.resetModules();
       const m = await import('@ranuts/shared/i18n');
-      expect(m.getLanguage()).toBe(LanguageCode.EN);
-      expect(m.getOnlyOfficeLang()).toBe('en');
+      expect(m.getLanguage()).toBe(LanguageCode.TR);
+      expect(m.getOnlyOfficeLang()).toBe('tr');
     } finally {
       spy.mockRestore();
     }
   });
 
-  it('an explicit shell choice overrides the browser language for the editor too', async () => {
+  it('ignores the browser language; an explicit shell choice sets the editor language', async () => {
     const spy = vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['ja-JP']);
     try {
       vi.resetModules();
       const m = await import('@ranuts/shared/i18n');
-      expect(m.getOnlyOfficeLang()).toBe('ja');
+      expect(m.getOnlyOfficeLang()).toBe('tr');
       m.setLanguage(LanguageCode.ZH);
       expect(m.getOnlyOfficeLang()).toBe('zh-CN');
       m.setLanguage(LanguageCode.EN);
