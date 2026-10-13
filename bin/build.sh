@@ -62,6 +62,10 @@ else
 fi
 
 # Run Vite build
+# Turkish (this fork): fill the gaps in the vendor's tr.json from bin/tr-sozluk.json
+# (see bin/tr-fill.mjs). Runs before locale-fill, which only covers the 7 site locales.
+node bin/tr-fill.mjs
+
 # The vendor's locale files are short against en.json, and some of the missing
 # strings exist only there -- a gap can surface as a modal "an error occurred"
 # on a blank document (see bin/locale-fill.mjs). Fill them for the languages the

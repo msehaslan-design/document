@@ -190,3 +190,18 @@ The local pnpm patch modifies wllama's memory64 capability detection and
 propagates fatal worker errors and explicit termination to pending and
 subsequent tasks; see
 patches/@wllama__wllama@3.6.1.patch.
+
+
+Turkish UI completion (this fork, 2026-10-13)
+---------------------------------------------
+
+The vendor's Turkish locale files (public/web-apps/apps/*/{main,mobile,embed,
+forms}/locale/tr.json) are incomplete against en.json. bin/tr-fill.mjs, run by
+bin/build.sh before the Vite build, fills every missing key from
+bin/tr-sozluk.json (English text -> Turkish) and falls back to the English
+value, so no key is left undefined. Values the vendor left identical to English
+are replaced when the dictionary has a translation; existing Turkish
+translations are not changed. The dictionary reuses the vendor's own Turkish
+strings where the same English text is translated elsewhere, plus new
+translations for the rest. The vendor files in this repository stay as shipped;
+the change exists only in the built output.
