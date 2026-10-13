@@ -34,6 +34,17 @@ The OFL text travels with each file (nameID 13) and is reproduced in full at
 which is what makes subsetting them legitimate; the subsets keep the original
 family names, so nothing here claims to be a font it is not.
 
+## Added by this fork (2026-10-13)
+
+Appended with `node bin/font-add-family.mjs` (all four faces, the vendor's
+registry layout, the sprites via `bin/font-thumbnails.mjs`). Shipped exactly as
+published -- the static TrueType faces from the release zip's `extras/ttf/`.
+Inter is the theme font of the fork's blank documents (`bin/blank-docs/`).
+
+| Family                                      | License     | Upstream                                                                       |
+| ------------------------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| Inter 4.1 (regular, italic, bold, bold it.) | SIL OFL 1.1 | the project's 4.1 release; fonts.google.com/specimen/Inter (catalog 282 - 285) |
+
 ## The names those faces answer to
 
 The substitution happens in the registry, not in the files: `__fonts_infos`

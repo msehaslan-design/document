@@ -140,6 +140,17 @@ export class L0Collector {
     // the page: a spec that opens a second page (save-to-file does, to prove a
     // file handle survives) would otherwise get one without them.
     await this.page.context().addInitScript(FRAME_HELPERS);
+    // This fork opens in Turkish when nothing else chooses a language (no
+    // ?locale=, cookie or stored choice); the suite asserts the upstream's
+    // English UI. Seed the stored choice only where a spec has not made one, so
+    // ?locale= and the language menu still decide.
+    await this.page.context().addInitScript(() => {
+      try {
+        if (!localStorage.getItem('document-lang')) localStorage.setItem('document-lang', 'en');
+      } catch {
+        /* storage blocked: the page falls back to its default */
+      }
+    });
     this.page.on('console', (msg) => {
       if (msg.type() !== 'error') return;
       const text = msg.text();

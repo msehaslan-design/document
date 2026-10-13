@@ -205,3 +205,25 @@ translations are not changed. The dictionary reuses the vendor's own Turkish
 strings where the same English text is translated elsewhere, plus new
 translations for the rest. The vendor files in this repository stay as shipped;
 the change exists only in the built output.
+
+Inter font and Turkish blank documents (this fork, 2026-10-13)
+--------------------------------------------------------------
+
+The vendor font catalog gained one family: Inter 4.1 (SIL Open Font License
+1.1, Copyright 2016 The Inter Project Authors; the family is also published at
+https://fonts.google.com/specimen/Inter),
+its four static TrueType faces stored unmodified (apart from the catalog's XOR
+prefix) as public/fonts/282-285. bin/font-add-family.mjs appended the faces to
+__fonts_files, one row to __fonts_infos and four records to
+g_fonts_selection_bin in public/sdkjs/common/AllFonts.js; bin/font-thumbnails.mjs
+appended Inter's tile to every public/sdkjs/common/Images/fonts_thumbnail*
+sprite.
+
+The blank document each editor opens for "new" is a literal embedded in
+public/web-apps/apps/{documenteditor,spreadsheeteditor,presentationeditor}/main/
+app.js and main/ie/app.js. bin/blank-docs.mjs, run by bin/build.sh before the
+Vite build, replaces it with the conversion of bin/blank-docs/tr.{docx,xlsx,
+pptx}: the vendor's own templates with Inter as the theme font, tr-TR as the
+language, A4 with 2.5 cm margins, a "Sayfa1" sheet and Turkish layout names and
+master texts. The vendor files in this repository stay as shipped; the change
+exists only in the built output.

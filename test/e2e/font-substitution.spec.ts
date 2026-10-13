@@ -73,16 +73,31 @@ async function renderIn(page: import('@playwright/test').Page, family: string, t
     },
     { name: family, body: text },
   );
-  await page.waitForTimeout(2500);
+  // The paste lands only after the engine has loaded every face the pasted runs
+  // need. Since new documents open in Inter (bin/blank-docs.mjs) rather than in
+  // a CJK face, the first paste can still be fetching tens of megabytes of East
+  // Asian defaults when a fixed delay runs out -- the shot then caught an empty
+  // page, and the second pass found both copies. Wait for the text instead.
+  const probe = text.slice(0, 5);
+  await expect.poll(() => documentText(page), { timeout: 60_000 }).toContain(probe);
+  await page.waitForTimeout(1500);
   // Just the first line of the page, not the whole frame: the toolbar shows
   // the family name, which differs between the two passes by construction.
   const shot = await page.screenshot({ clip: TEXT_LINE });
   // Leave the document empty for the next pass.
   await page.keyboard.press('Control+a');
   await page.keyboard.press('Backspace');
+  await expect.poll(() => documentText(page)).not.toContain(probe);
   await page.waitForTimeout(800);
   return shot;
 }
+
+/** The document's text, as the engine holds it. */
+const documentText = (page: import('@playwright/test').Page) =>
+  page.evaluate(() => {
+    const win = window.__ooFrames.readyEditor() as any;
+    return win ? String(win.Asc.editor.WordControl.m_oLogicDocument.GetText()) : '';
+  });
 
 test.describe('font substitution renders', () => {
   test.describe.configure({ timeout: 240_000 });

@@ -46,6 +46,13 @@ node bin/font-catalog.mjs verify public/fonts/000
 
 ## Adding a font
 
+For a whole family, `node bin/font-add-family.mjs` does steps 1-3 below for
+every face (regular, italic, bold, bold italic), appends the
+`g_fonts_selection_bin` records, and refuses a face whose own family name
+differs from the row or whose outlines are CFF; list the family in its
+`FAMILIES` table, put the faces in `vendor-fonts/`, run it, then run step 4.
+This fork added Inter that way (positions 282-285). The steps, by hand:
+
 1. Encode the TTF: `node bin/font-catalog.mjs encode MyFont.ttf
 public/fonts/<new-name>` (pick an unused file name; by convention a
    zero-padded number).

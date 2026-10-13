@@ -93,7 +93,11 @@ test('formatted Word content retains native headings and lists with safe readbac
   await expect(preview.locator('.agent-plan-diff')).toContainText('Budget');
   expect(await read()).toEqual(before);
   await preview.locator('.agent-plan-apply').click();
-  await expect.poll(() => preview.getAttribute('data-state')).not.toBe('applying');
+  // Applying pastes formatted content, and a document's first paste loads the
+  // fallback faces the font picker has collected (CJK and Hangul, ~29 MB on a
+  // cold cache) now that blank documents open in Inter rather than in a CJK
+  // face (bin/blank-docs.mjs). That can outlast the default 5 s.
+  await expect.poll(() => preview.getAttribute('data-state'), { timeout: 30_000 }).not.toBe('applying');
   await testInfo.attach('native-word-format.json', {
     body: JSON.stringify({ before, after: await read() }),
     contentType: 'application/json',
@@ -221,7 +225,7 @@ test('read progress states its scope and disclosure text shares the marker line 
   await page.locator('.cui-input').press('Enter');
   await expect(page.locator('.cui-send-stop')).toHaveCount(0);
   const summary = page.locator('.cui-activity summary').last();
-  await expect(summary).toContainText('Read: Sheet1 · B2:C4');
+  await expect(summary).toContainText('Read: Sayfa1 · B2:C4');
   const offset = await summary.evaluate((element) => {
     const range = document.createRange();
     range.selectNodeContents(element.firstElementChild!);
@@ -232,7 +236,7 @@ test('read progress states its scope and disclosure text shares the marker line 
   await summary.press('Enter');
   await expect(summary.locator('..')).toHaveAttribute('open', '');
   await expect(summary).toBeFocused();
-  expect(await summary.ariaSnapshot()).toContain('Read: Sheet1');
+  expect(await summary.ariaSnapshot()).toContain('Read: Sayfa1');
   expect(
     await page.evaluate(() => {
       const win = window.__ooFrames.readyEditor() as any;

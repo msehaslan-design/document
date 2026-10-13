@@ -9,6 +9,13 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Turkish blank documents with Inter.** New Word, Excel and PowerPoint files
+  open in Inter 11 pt with Turkish as the document language; Word pages are A4
+  with 2.5 cm margins, the first sheet is "Sayfa1", and slide layouts have
+  Turkish names. Inter is in the font list and embeds when exporting to PDF.
+  New documents previously started in a Chinese font and, for presentations,
+  with Chinese as the language.
+
 - **Keep document structure when writing an assistant draft.** Word headings,
   lists and emphasis remain formatted; long slide content continues on fitted
   pages without dropping text. Completed changes keep location and Undo guidance.

@@ -66,6 +66,11 @@ fi
 # (see bin/tr-fill.mjs). Runs before locale-fill, which only covers the 7 site locales.
 node bin/tr-fill.mjs
 
+# This fork: new documents open from Turkish blank templates (Inter, tr-TR, A4
+# with 2.5 cm margins, a "Sayfa1" sheet) instead of the vendor's Chinese ones.
+# Swaps the literal embedded in each editor bundle; see bin/blank-docs.mjs.
+node bin/blank-docs.mjs
+
 # The vendor's locale files are short against en.json, and some of the missing
 # strings exist only there -- a gap can surface as a modal "an error occurred"
 # on a blank document (see bin/locale-fill.mjs). Fill them for the languages the
