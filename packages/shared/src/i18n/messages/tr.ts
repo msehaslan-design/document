@@ -403,4 +403,8 @@ export const tr: I18nMessages = {
   historyRailSettings: 'Ayarlar',
   historyRailRetention: 'Saklama süresi',
   untitledDocument: 'Adsız',
+  mobileShareTitle: 'Belge hazır',
+  mobileShareShare: 'Paylaş',
+  mobileShareDownload: 'İndir',
+  mobileShareClose: 'Kapat',
 };

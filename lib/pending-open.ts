@@ -1,7 +1,8 @@
 // Consume a file handed off by a static landing page (public/open-local.js):
 // the page stashes the picked file in IndexedDB and navigates to the app with
 // `?open=local`; the app takes it out (one-shot) and opens it. The DB / store /
-// key names here must stay in sync with public/open-local.js.
+// key names and the record shape must stay in sync with public/open-local.js
+// and with public/sw.js, whose Android share target writes the same record.
 const DB_NAME = 'document-handoff';
 const STORE = 'files';
 const KEY = 'pending';

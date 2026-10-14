@@ -394,4 +394,8 @@ export const ko: Partial<I18nMessages> = {
   historyDeleteTitle: '이 문서 삭제',
   historyClearTitle: '전체 삭제',
   untitledDocument: '제목 없음',
+  mobileShareTitle: '문서가 준비되었습니다',
+  mobileShareShare: '공유',
+  mobileShareDownload: '다운로드',
+  mobileShareClose: '닫기',
 };

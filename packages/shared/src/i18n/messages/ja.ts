@@ -403,4 +403,8 @@ export const ja: Partial<I18nMessages> = {
   historyDeleteTitle: 'このドキュメントを削除',
   historyClearTitle: 'すべて削除',
   untitledDocument: '無題',
+  mobileShareTitle: 'ドキュメントの準備ができました',
+  mobileShareShare: '共有',
+  mobileShareDownload: 'ダウンロード',
+  mobileShareClose: '閉じる',
 };

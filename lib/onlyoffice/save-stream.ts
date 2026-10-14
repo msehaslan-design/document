@@ -7,6 +7,7 @@ import { getDocumentOpenError, waitForDocumentContentReady } from './open-state'
 import { getReadonlyMode } from './readonly';
 import { isEmbedMode } from '../embed-mode';
 import { markDocumentSaved } from '../unsaved-guard';
+import { canOfferShare, offerShareSheet } from '../mobile-share';
 
 /**
  * Notified when bytes actually reach the user's disk.
@@ -141,6 +142,12 @@ function routeSavedFile(file: File): void {
     try {
       if (await diskWriter?.(file)) {
         reachedDisk();
+        return;
+      }
+      // Phones and tablets: the system share sheet next to the download
+      // (lib/mobile-share.ts). Closing the sheet keeps the document unsaved.
+      if (canOfferShare(file)) {
+        if (await offerShareSheet(file)) reachedDisk();
         return;
       }
       await saveFileToDisk(file, file.name);

@@ -405,4 +405,8 @@ export const pt: Partial<I18nMessages> = {
   historyDeleteTitle: 'Eliminar este documento',
   historyClearTitle: 'Eliminar tudo',
   untitledDocument: 'Sem título',
+  mobileShareTitle: 'O seu documento está pronto',
+  mobileShareShare: 'Partilhar',
+  mobileShareDownload: 'Transferir',
+  mobileShareClose: 'Fechar',
 };

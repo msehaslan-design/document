@@ -398,4 +398,8 @@ export const en: I18nMessages = {
   historyRailSettings: 'Settings',
   historyRailRetention: 'Retention',
   untitledDocument: 'Untitled',
+  mobileShareTitle: 'Your document is ready',
+  mobileShareShare: 'Share',
+  mobileShareDownload: 'Download',
+  mobileShareClose: 'Close',
 };

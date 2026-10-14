@@ -430,8 +430,87 @@ async function withIsolationHeaders(response) {
   });
 }
 
+// Android share target (manifest.json `share_target`): once the app is
+// installed, "Share -> Ofisim" in WhatsApp, Gmail or Files POSTs the file here.
+// It is answered entirely in this worker -- the bytes never reach a server.
+// They go into the same IndexedDB handoff the landing page's "open a file"
+// uses (public/open-local.js writes it, lib/pending-open.ts reads it; the
+// DB / store / key names and the record shape belong to those two), and the
+// editor takes them with ?open=local. iOS has no share target for web apps.
+const SHARE_TARGET_PATH = '/share-target';
+// Some apps share a file without an extension; the editor picks the document
+// type from the name, so the MIME type supplies one.
+const SHARED_FILE_EXTENSION = {
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
+  'application/msword': 'doc',
+  'application/vnd.ms-excel': 'xls',
+  'application/vnd.ms-powerpoint': 'ppt',
+  'application/pdf': 'pdf',
+  'text/csv': 'csv',
+  'application/vnd.oasis.opendocument.text': 'odt',
+  'application/vnd.oasis.opendocument.spreadsheet': 'ods',
+  'application/vnd.oasis.opendocument.presentation': 'odp',
+  'application/rtf': 'rtf',
+};
+
+function stashSharedFile(record) {
+  return new Promise((resolve, reject) => {
+    const open = indexedDB.open('document-handoff', 1);
+    open.onupgradeneeded = () => open.result.createObjectStore('files');
+    open.onerror = () => reject(open.error);
+    open.onsuccess = () => {
+      const db = open.result;
+      const tx = db.transaction('files', 'readwrite');
+      tx.objectStore('files').put(record, 'pending');
+      tx.oncomplete = () => {
+        db.close();
+        resolve();
+      };
+      tx.onerror = tx.onabort = () => {
+        db.close();
+        reject(tx.error);
+      };
+    };
+  });
+}
+
+async function receiveSharedFile(request) {
+  const go = (path) => Response.redirect(new URL(path, self.location.origin).href, 303);
+  try {
+    const form = await request.formData();
+    const file = form
+      .getAll('file')
+      .find((value) => value && typeof value === 'object' && typeof value.arrayBuffer === 'function' && value.size > 0);
+    if (!file) return go('/');
+    let name = String(file.name || '')
+      .split(/[\\/]/)
+      .pop();
+    if (!/\.[a-z0-9]{2,5}$/i.test(name) && SHARED_FILE_EXTENSION[file.type]) {
+      name = `${name || 'Document'}.${SHARED_FILE_EXTENSION[file.type]}`;
+    }
+    if (!name) return go('/');
+    await stashSharedFile({
+      name,
+      type: file.type,
+      lastModified: file.lastModified || Date.now(),
+      bytes: new Uint8Array(await file.arrayBuffer()),
+    });
+    return go('/editor?open=local');
+  } catch {
+    // Unreadable form or no IndexedDB: the homepage, where the file can still
+    // be opened by hand, beats an error page.
+    return go('/');
+  }
+}
+
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+  if (event.request.method === 'POST' && url.origin === self.location.origin && url.pathname === SHARE_TARGET_PATH) {
+    event.respondWith(receiveSharedFile(event.request));
+    return;
+  }
   const respondWith = (response) =>
     event.respondWith(
       Promise.resolve(response).then((resolved) => {

@@ -422,4 +422,8 @@ export const de: Partial<I18nMessages> = {
   historyDeleteTitle: 'Dieses Dokument löschen',
   historyClearTitle: 'Alles löschen',
   untitledDocument: 'Unbenannt',
+  mobileShareTitle: 'Ihr Dokument ist bereit',
+  mobileShareShare: 'Teilen',
+  mobileShareDownload: 'Herunterladen',
+  mobileShareClose: 'Schließen',
 };

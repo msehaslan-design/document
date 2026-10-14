@@ -381,4 +381,8 @@ export const zhCN: I18nMessages = {
   historyExpiresInOne: '剩 1 天',
   historyExpiresToday: '今天',
   untitledDocument: '未命名',
+  mobileShareTitle: '文档已就绪',
+  mobileShareShare: '分享',
+  mobileShareDownload: '下载',
+  mobileShareClose: '关闭',
 };

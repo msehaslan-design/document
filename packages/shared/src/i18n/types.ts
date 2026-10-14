@@ -397,4 +397,8 @@ export interface I18nMessages {
   historyRailRetention: string;
   /** File name (without extension) given to a new blank document. */
   untitledDocument: string;
+  mobileShareTitle: string;
+  mobileShareShare: string;
+  mobileShareDownload: string;
+  mobileShareClose: string;
 }

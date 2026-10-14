@@ -9,6 +9,15 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Phones and tablets: share a saved document, open a shared one.** Saving
+  on a touch device whose browser can share the file (iPhone and iPad: Word,
+  Excel, PowerPoint and PDF; Android: PDF) shows "Paylaş" next to "İndir", so
+  the document goes straight to Files, WhatsApp or Mail instead of a download
+  that is hard to find. Once installed on Android, the app is in the system
+  share menu: "Paylaş → Ofisim" in WhatsApp, Gmail or Files opens the document
+  in the editor, without it leaving the phone. The homepage now explains how
+  to install the app on iPhone/iPad and on Android separately.
+
 - **Templates on the homepage.** Five ready documents open in the editor under
   their own names: an eye examination report, an eye health board report, a
   monthly duty roster (days, weekends and per-person counts fill in by
