@@ -13,6 +13,7 @@ import { View } from 'ranui/builder';
 import { initEmbedApi } from './lib/embed-api';
 import { initEvents, setEventUICallbacks } from './lib/events';
 import { onCreateNew, onOpenDocument, openDocumentFromUrl, openLocalFile, setUICallbacks } from './lib/document';
+import { fileNameFromParam } from './lib/url-file-name';
 import { parseReadonly } from '@ranuts/shared/document-utils';
 import { applyDocumentLanguage } from '@ranuts/shared/i18n';
 import { getDocmentObj } from '@ranuts/shared/store';
@@ -110,7 +111,7 @@ createControlPanel();
 //   ?file=https://example.com/doc.docx
 //   ?src=https://example.com/doc.docx
 //   ?file=doc1.docx&src=doc2.xlsx (will use file: doc1.docx)
-const { file, src, readonly } = params;
+const { file, src, readonly, name } = params;
 const documentUrl = file || src;
 // Pure preview mode: ?readonly=true (also accepts ?readonly=1 or bare ?readonly).
 // Opens the document with editing/download disabled (#25, #85, #87).
@@ -175,11 +176,18 @@ void (async () => {
   if (documentUrl) {
     try {
       const decodedUrl = decodeURIComponent(documentUrl);
-      await openDocumentFromUrl(decodedUrl, undefined, { readonly: isReadonly, docId: savedParam || undefined });
+      // `?name=` gives a template its human name ("Göz muayene raporu.docx").
+      await openDocumentFromUrl(decodedUrl, fileNameFromParam(name, decodedUrl, location.href), {
+        readonly: isReadonly,
+        docId: savedParam || undefined,
+      });
     } catch (error) {
       // If decoding fails, try using original URL
       console.warn('Failed to decode URL, using original:', error);
-      await openDocumentFromUrl(documentUrl, undefined, { readonly: isReadonly, docId: savedParam || undefined });
+      await openDocumentFromUrl(documentUrl, fileNameFromParam(name, documentUrl, location.href), {
+        readonly: isReadonly,
+        docId: savedParam || undefined,
+      });
     }
     return;
   }

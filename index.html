@@ -222,6 +222,63 @@
         text-decoration: none;
         padding: 10px 2px;
       }
+      .templates {
+        margin-top: 30px;
+      }
+      .templates h2 {
+        font-size: 20px;
+        margin: 0 0 4px;
+      }
+      .templates > p {
+        color: var(--muted);
+        margin: 0 0 14px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .tgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+      }
+      .tcard {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        background: var(--card);
+        border: 1px solid var(--card-line);
+        border-radius: 14px;
+        padding: 14px;
+        color: inherit;
+        text-decoration: none;
+        transition:
+          transform 0.12s ease,
+          box-shadow 0.12s ease;
+      }
+      .tcard:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(16, 80, 78, 0.12);
+      }
+      .tcard:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--accent);
+      }
+      .tcard .icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 16px;
+        flex: none;
+      }
+      .tcard b {
+        display: block;
+        font-size: 16px;
+        margin-bottom: 2px;
+      }
+      .tcard span {
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.4;
+      }
       .notes {
         margin-top: 28px;
         color: var(--muted);
@@ -292,6 +349,59 @@
         <span data-recent-slot data-recent-label="Kaldığınız yerden devam edin:" hidden></span>
         <a class="plain" href="/history?locale=tr">Tüm kayıtlı belgeler →</a>
       </div>
+      <section class="templates" aria-labelledby="sablonlar">
+        <h2 id="sablonlar">Şablonlar</h2>
+        <p>Hazır bir belgeyle başlayın: şablon açılır, doldurup kendi adınızla kaydedersiniz.</p>
+        <div class="tgrid">
+          <a
+            class="tcard doc"
+            href="/editor?file=/templates/goz-muayene-raporu.docx&name=G%C3%B6z%20muayene%20raporu.docx&locale=tr"
+          >
+            <div class="icon" aria-hidden="true">W</div>
+            <div>
+              <b>Göz muayene raporu</b>
+              <span>Hasta bilgileri, sağ/sol göz bulgu tablosu, tanı, tedavi ve imza</span>
+            </div>
+          </a>
+          <a
+            class="tcard doc"
+            href="/editor?file=/templates/goz-saglik-kurulu-raporu.docx&name=G%C3%B6z%20sa%C4%9Fl%C4%B1k%20kurulu%20raporu.docx&locale=tr"
+          >
+            <div class="icon" aria-hidden="true">W</div>
+            <div>
+              <b>Göz sağlık kurulu raporu</b>
+              <span>Rapor amacı, kişi bilgileri, göz muayenesi, karar ve kurul üyeleri</span>
+            </div>
+          </a>
+          <a
+            class="tcard sheet"
+            href="/editor?file=/templates/nobet-cizelgesi.xlsx&name=N%C3%B6bet%20%C3%A7izelgesi.xlsx&locale=tr"
+          >
+            <div class="icon" aria-hidden="true">X</div>
+            <div>
+              <b>Nöbet çizelgesi</b>
+              <span>Aylık çizelge; günler, hafta sonları ve kişi başı sayılar kendiliğinden</span>
+            </div>
+          </a>
+          <a class="tcard slides" href="/editor?file=/templates/ders-sunumu.pptx&name=Ders%20sunumu.pptx&locale=tr">
+            <div class="icon" aria-hidden="true">P</div>
+            <div>
+              <b>Ders sunumu</b>
+              <span>Hedefler, ders akışı, karşılaştırma, olgu, özet ve kaynaklar</span>
+            </div>
+          </a>
+          <a
+            class="tcard doc"
+            href="/editor?file=/templates/calisma-kagidi.docx&name=%C3%87al%C4%B1%C5%9Fma%20k%C3%A2%C4%9F%C4%B1d%C4%B1.docx&locale=tr"
+          >
+            <div class="icon" aria-hidden="true">W</div>
+            <div>
+              <b>Çalışma kâğıdı</b>
+              <span>Açık uçlu, doğru-yanlış, boşluk doldurma ve çoktan seçmeli sorular</span>
+            </div>
+          </a>
+        </div>
+      </section>
       <div class="notes">
         <p>
           Otomatik kaydetme açıksa değişiklikler bu tarayıcıda 7 gün boyunca kurtarma kopyası olarak saklanır. Asıl

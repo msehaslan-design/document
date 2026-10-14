@@ -9,6 +9,11 @@ notes. Entries describe what users experience, not internal refactors.
 
 ### Added
 
+- **Templates on the homepage.** Five ready documents open in the editor under
+  their own names: an eye examination report, an eye health board report, a
+  monthly duty roster (days, weekends and per-person counts fill in by
+  themselves), a lecture deck and a worksheet. All in Inter and Turkish, A4.
+
 - **Turkish blank documents with Inter.** New Word, Excel and PowerPoint files
   open in Inter 11 pt with Turkish as the document language; Word pages are A4
   with 2.5 cm margins, the first sheet is "Sayfa1", and slide layouts have
